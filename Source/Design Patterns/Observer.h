@@ -51,10 +51,6 @@ class Subject
 {
 	static_assert(std::is_base_of<Observer<Obs>, Obs>::value, "Obs must inherit from Observer<Obs>");
 
-private:
-	std::list<Obs*> m_Observers;
-	std::mutex      m_ObserversMut;
-
 public:
 	virtual ~Subject()
 	{
@@ -93,4 +89,8 @@ public:
 		for (Obs* obs : m_Observers)
 			obs->Update(std::forward<Args>(args)...);
 	}
+
+private:
+	std::list<Obs*> m_Observers;
+	std::mutex      m_ObserversMut;
 };
