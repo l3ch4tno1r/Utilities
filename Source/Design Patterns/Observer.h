@@ -22,8 +22,6 @@ class Observer
 private:
 	using SubjectType = Subject<Obs>;
 
-	SubjectType* m_Subject = nullptr;
-
 public:
 	virtual ~Observer()
 	{
@@ -40,6 +38,9 @@ public:
 	};
 
 	void DisconnectFromSubject() { m_Subject = nullptr; }
+
+private:
+	SubjectType* m_Subject = nullptr;
 };
 
 /////////////////
