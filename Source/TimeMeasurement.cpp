@@ -13,8 +13,8 @@ Timer::~Timer()
 	auto end = std::chrono::high_resolution_clock::now();
 	long long ellapsed_millis = std::chrono::duration_cast<std::chrono::milliseconds> (end - start).count();
 
-	ASSERT(ellapsed_millis < 16);
-	std::cout << "Block execution time : " << (float)ellapsed_millis / 1000.0f << " ms" << std::endl;
+	//ASSERT(ellapsed_millis < 16);
+	std::cout << "Block execution time : " << (float)ellapsed_millis / 1000.0f << " s" << std::endl;
 }
 
 Timer2::Timer2(std::string & _target) :

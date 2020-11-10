@@ -131,6 +131,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="External\stb_image\stb_image.h" />
+    <ClInclude Include="Source\Benchmarking.h" />
     <ClInclude Include="Source\ConfigManager.h" />
     <ClInclude Include="Source\Design Patterns\Observer.h" />
     <ClInclude Include="Source\ErrorHandling.h" />
