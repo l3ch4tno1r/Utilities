@@ -5,10 +5,6 @@
 template<typename T>
 class Counter
 {
-private:
-	uint32_t m_Id;
-	static uint32_t m_Count;
-
 public:
 	Counter() :
 		m_Id(++m_Count)
@@ -28,6 +24,13 @@ public:
 	{
 		return m_Count;
 	}
+
+protected:
+	~Counter() = default;
+
+private:
+	uint32_t m_Id;
+	static uint32_t m_Count;
 };
 
 template<typename T>
