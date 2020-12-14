@@ -123,6 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="External\sqlite3\sqlite3.c" />
     <ClCompile Include="External\stb_image\stb_image.cpp" />
     <ClCompile Include="Source\ConfigManager.cpp" />
     <ClCompile Include="Source\ErrorHandling.cpp" />
@@ -130,6 +131,7 @@
     <ClCompile Include="Source\TraceLog.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="External\sqlite3\sqlite3.h" />
     <ClInclude Include="External\stb_image\stb_image.h" />
     <ClInclude Include="Source\Benchmarking.h" />
     <ClInclude Include="Source\ConfigManager.h" />
