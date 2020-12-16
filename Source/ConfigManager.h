@@ -5,21 +5,20 @@
 #include <string>
 #include <sstream>
 
-using namespace std;
-
 namespace LCNUtilities
 {
 	class ConfigManager
 	{
+	private:
 		class Parameter
 		{
 		private:
-			string value;
+			std::string value;
 
 		public:
 			Parameter();
 
-			Parameter(const string &astr);
+			Parameter(const std::string &astr);
 
 			template<class T>
 			T Value() const;
@@ -28,34 +27,36 @@ namespace LCNUtilities
 			void Value(const T &val);
 		};
 
+	public:
+		static ConfigManager& AppSettings() noexcept;
+
+		Parameter& operator[](const std::string& key);
+
 	private:
-		unordered_map<string, Parameter> configmap;
+		std::unordered_map<std::string, Parameter> m_ConfigMap;
 
 		ConfigManager();
 
 		~ConfigManager();
 
-	public:
 		ConfigManager(const ConfigManager&) = delete;
 		ConfigManager& operator=(ConfigManager&) = delete;
-
-		static ConfigManager& AppSettings() noexcept;
-
-		Parameter& operator[](const string& key);
 	};
 
 	template<class T>
 	inline T ConfigManager::Parameter::Value() const
 	{
 		T result;
-		stringstream ss;
+		std::stringstream ss;
 
-		if (value.empty()) throw exception("This parameter is empty.");
+		if (value.empty())
+			throw std::exception("This parameter is empty.");
 
 		ss << value;
 		ss >> result;
 
-		if (ss.fail()) throw exception("Failed to convert parameter to required type.");
+		if (ss.fail())
+			throw std::exception("Failed to convert parameter to required type.");
 
 		return result;
 	}
@@ -63,7 +64,7 @@ namespace LCNUtilities
 	template<class T>
 	inline void ConfigManager::Parameter::Value(const T &val)
 	{
-		stringstream ss;
+		std::stringstream ss;
 
 		ss << val;
 		ss >> value;
