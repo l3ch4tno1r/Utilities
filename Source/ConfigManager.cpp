@@ -9,22 +9,22 @@ namespace LCNUtilities
 	// Construcor / Destructor
 	ConfigManager::ConfigManager()
 	{
-		ifstream configfile("config.txt", ios::in);
+		std::ifstream configfile("config.txt", std::ios::in);
 
 		if (configfile)
 		{
-			string line;
+			std::string line;
 
-			while (getline(configfile, line))
+			while (std::getline(configfile, line))
 			{
 				if (line.size() != 0)
 				{
-					stringstream ssdata(line);
-					string key, value;
+					std::stringstream ssdata(line);
+					std::string key, value;
 
 					ssdata >> key >> value;
 
-					configmap[key].Value(value);
+					m_ConfigMap[key].Value(value);
 				}
 			}
 
@@ -43,9 +43,14 @@ namespace LCNUtilities
 		return appsettings;
 	}
 
-	ConfigManager::Parameter& ConfigManager::operator[](const string& key)
+	ConfigManager::Parameter& ConfigManager::operator[](const std::string& key)
 	{
-		return configmap[key];
+		auto it = m_ConfigMap.find(key);
+
+		if (it == m_ConfigMap.end())
+			throw std::out_of_range("Cannot find the specified key.");
+
+		return it->second;
 	}
 
 	// Instanciation
@@ -54,7 +59,7 @@ namespace LCNUtilities
 		value()
 	{}
 
-	ConfigManager::Parameter::Parameter(const string &astr) :
+	ConfigManager::Parameter::Parameter(const std::string &astr) :
 		value(astr)
 	{}
 }
