@@ -53,13 +53,12 @@ namespace LCNUtilities
 	template<class T>
 	inline T ConfigManager::Parameter::Value() const
 	{
-		T result;
-		std::stringstream ss;
-
 		if (value.empty())
 			throw std::exception("This parameter is empty.");
 
-		ss << value;
+		T result;
+		std::stringstream ss(value);
+
 		ss >> result;
 
 		if (ss.fail())
