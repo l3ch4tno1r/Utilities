@@ -25,22 +25,29 @@ namespace LCNUtilities
 
 			template<class T>
 			void Value(const T &val);
+
+			template<class T>
+			inline operator T()
+			{
+				return Value<T>();
+			}
 		};
 
 	public:
-		static ConfigManager& AppSettings() noexcept;
+		static ConfigManager& AppSettings();
 
 		Parameter& operator[](const std::string& key);
 
 	private:
 		std::unordered_map<std::string, Parameter> m_ConfigMap;
 
-		ConfigManager();
-
-		~ConfigManager();
+		ConfigManager() = default;
+		~ConfigManager() = default;
 
 		ConfigManager(const ConfigManager&) = delete;
 		ConfigManager& operator=(ConfigManager&) = delete;
+
+		void LoadConfig();
 	};
 
 	template<class T>
