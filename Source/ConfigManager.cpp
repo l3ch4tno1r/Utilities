@@ -55,10 +55,10 @@ namespace LCNUtilities
 	// Instanciation
 
 	ConfigManager::Parameter::Parameter() :
-		value()
+		m_Value()
 	{}
 
 	ConfigManager::Parameter::Parameter(const std::string &astr) :
-		value(astr)
+		m_Value(astr)
 	{}
 }

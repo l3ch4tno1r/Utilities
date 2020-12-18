@@ -12,9 +12,6 @@ namespace LCNUtilities
 	private:
 		class Parameter
 		{
-		private:
-			std::string value;
-
 		public:
 			Parameter();
 
@@ -31,6 +28,9 @@ namespace LCNUtilities
 			{
 				return Value<T>();
 			}
+
+		private:
+			std::string m_Value;
 		};
 
 	public:
@@ -53,11 +53,11 @@ namespace LCNUtilities
 	template<class T>
 	inline T ConfigManager::Parameter::Value() const
 	{
-		if (value.empty())
+		if (m_Value.empty())
 			throw std::exception("This parameter is empty.");
 
 		T result;
-		std::stringstream ss(value);
+		std::stringstream ss(m_Value);
 
 		ss >> result;
 
@@ -73,7 +73,7 @@ namespace LCNUtilities
 		std::stringstream ss;
 
 		ss << val;
-		ss >> value;
+		ss >> m_Value;
 	}
 }
 
