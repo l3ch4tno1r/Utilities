@@ -76,6 +76,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +140,7 @@
     <ClInclude Include="Source\ErrorHandling.h" />
     <ClInclude Include="Source\InstanceCounter.h" />
     <ClInclude Include="Source\Instrumentor.h" />
+    <ClInclude Include="Source\SQLite\SQLiteDB.h" />
     <ClInclude Include="Source\TimeMeasurement.h" />
     <ClInclude Include="Source\TraceLog.h" />
     <ClInclude Include="Source\Utils.h" />
