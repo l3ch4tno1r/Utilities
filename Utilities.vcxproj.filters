@@ -68,8 +68,5 @@
     <ClInclude Include="External\sqlite3\sqlite3.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\SQLite\SQLiteDB.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
