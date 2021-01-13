@@ -41,21 +41,21 @@ namespace LCN
 	public:
 		inline void operator()(Args&& ...args)
 		{
-			m_Slot(std::forward<Args>(args)...);
+			(m_Owner.*m_Method)(std::forward<Args>(args)...);
 		}
 
 	private:
 		friend Owner;
 
-		using FunctionType = std::function<void(Args...)>;
-
 		typedef void(Owner::*MethodPtrType)(Args...);
 
 		Slot(Owner& owner, MethodPtrType method) :
-			m_Slot(std::bind(method, std::ref(owner)))
+			m_Owner(owner),
+			m_Method(method)
 		{}
 
-		FunctionType m_Slot;
+		Owner&        m_Owner;
+		MethodPtrType m_Method;
 	};
 
 	////////////////
@@ -87,5 +87,5 @@ namespace LCN
 	template<class F>
 	void Bind(Signal<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
 
-#define INIT_SLOT(Method) *this, &Method
+#define SLOT_INIT(Method) *this, &Method
 }
