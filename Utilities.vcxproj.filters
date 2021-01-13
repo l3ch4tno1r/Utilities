@@ -35,9 +35,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Design Patterns\Observer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
     <ClInclude Include="Source\ConfigManager.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
@@ -71,7 +68,10 @@
     <ClInclude Include="Source\SQLite\SQLiteDB.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Design Patterns\SignalSlot.h">
+    <ClInclude Include="Source\DesignPatterns\Observer.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\DesignPatterns\SignalSlot.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
