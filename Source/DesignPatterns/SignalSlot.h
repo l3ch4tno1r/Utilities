@@ -101,5 +101,9 @@ namespace LCN
 	void Connect(SignalBase<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
 
 	#define SLOT_INIT(SlotName, Method) SlotName(*this, &Method)
+
+	#define SLOT(OwnerClass, Method, ...) \
+	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
+	void Method(__VA_ARGS__);
 #pragma endregion
 }
