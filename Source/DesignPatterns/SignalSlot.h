@@ -98,8 +98,8 @@ namespace LCN
 	///////////////
 
 	template<class F>
-	void Bind(SignalBase<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
+	void Connect(SignalBase<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
 
-	#define SLOT_INIT(Method) *this, &Method
+	#define SLOT_INIT(SlotName, Method) SlotName(*this, &Method)
 #pragma endregion
 }
