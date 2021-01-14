@@ -6,6 +6,7 @@
 
 namespace LCN
 {
+#pragma region Slot
 	//////////////////
 	//-- SlotBase --//
 	//////////////////
@@ -57,7 +58,9 @@ namespace LCN
 		Owner&        m_Owner;
 		MethodPtrType m_Method;
 	};
+#pragma endregion
 
+#pragma region Signal
 	////////////////////
 	//-- SignalBase --//
 	////////////////////
@@ -87,7 +90,9 @@ namespace LCN
 
 		friend Owner;
 	};
+#pragma endregion
 
+#pragma region Utils
 	///////////////
 	//-- Utils --//
 	///////////////
@@ -95,5 +100,6 @@ namespace LCN
 	template<class F>
 	void Bind(SignalBase<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
 
-#define SLOT_INIT(Method) *this, &Method
+	#define SLOT_INIT(Method) *this, &Method
+#pragma endregion
 }
