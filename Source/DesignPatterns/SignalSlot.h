@@ -58,26 +58,34 @@ namespace LCN
 		MethodPtrType m_Method;
 	};
 
+	////////////////////
+	//-- SignalBase --//
+	////////////////////
+
+	template<class F>
+	class SignalBase;
+
+	template<class ...Args>
+	class SignalBase<void(Args...)> : public Subject<SlotBase<void(Args...)>>
+	{};
+
 	////////////////
 	//-- Signal --//
 	////////////////
 
-	template<class F>
+	template<class O, class F>
 	class Signal;
 
-	template<class ...Args>
-	class Signal<void(Args...)> : public Subject<SlotBase<void(Args...)>>
+	template<class Owner, class ...Args>
+	class Signal<Owner, void(Args...)> : public SignalBase<void(Args...)>
 	{
-	public:
-		inline void operator()(Args&& ...args)
-		{
-			this->Notify(std::forward<Args>(args)...);
-		}
-
+	private:
 		inline void Emmit(Args&& ...args)
 		{
 			this->Notify(std::forward<Args>(args)...);
 		}
+
+		friend Owner;
 	};
 
 	///////////////
@@ -85,7 +93,7 @@ namespace LCN
 	///////////////
 
 	template<class F>
-	void Bind(Signal<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
+	void Bind(SignalBase<F>& signal, SlotBase<F>& slot) { signal.AddObserver(slot); }
 
 #define SLOT_INIT(Method) *this, &Method
 }
