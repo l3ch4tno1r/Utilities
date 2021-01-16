@@ -83,7 +83,7 @@ public:
 	}
 
 	template<typename ...Args>
-	void Notify(Args&& ...args)
+	inline void Notify(Args&& ...args)
 	{
 		std::lock_guard<std::mutex> lock(m_ObserversMut);
 

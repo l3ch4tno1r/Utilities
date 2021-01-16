@@ -20,7 +20,7 @@ namespace LCN
 	public:
 		virtual inline void operator()(Args&&...) = 0;
 
-		void Update(Args&&... args)
+		inline void Update(Args&&... args)
 		{
 			this->operator()(std::forward<Args>(args)...);
 		}
@@ -105,5 +105,9 @@ namespace LCN
 	#define SLOT(OwnerClass, Method, ...) \
 	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
 	void Method(__VA_ARGS__);
+
+	#define VIRTUAL_SLOT(OwnerClass, Method, ...) \
+	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
+	virtual void Method(__VA_ARGS__);
 #pragma endregion
 }
