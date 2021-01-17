@@ -18,11 +18,11 @@ namespace LCN
 	class SlotBase<void(Args...)> : public Observer<SlotBase<void(Args...)>>
 	{
 	public:
-		virtual inline void operator()(Args&&...) = 0;
+		virtual inline void operator()(Args...) = 0;
 
-		inline void Update(Args&&... args)
+		inline void Update(Args... args)
 		{
-			this->operator()(std::forward<Args>(args)...);
+			this->operator()(args...);
 		}
 
 	protected:
@@ -40,9 +40,9 @@ namespace LCN
 	class Slot<Owner, void(Args...)> : public SlotBase<void(Args...)>
 	{
 	public:
-		inline void operator()(Args&& ...args)
+		inline void operator()(Args ...args)
 		{
-			(m_Owner.*m_Method)(std::forward<Args>(args)...);
+			(m_Owner.*m_Method)(args...);
 		}
 
 	private:
@@ -70,7 +70,10 @@ namespace LCN
 
 	template<class ...Args>
 	class SignalBase<void(Args...)> : public Subject<SlotBase<void(Args...)>>
-	{};
+	{
+	protected:
+		using SlotBaseType = SlotBase<void(Args...)>;
+	};
 
 	////////////////
 	//-- Signal --//
@@ -83,9 +86,14 @@ namespace LCN
 	class Signal<Owner, void(Args...)> : public SignalBase<void(Args...)>
 	{
 	private:
-		inline void Emmit(Args&& ...args)
+		using Base = SignalBase<void(Args...)>;
+
+		inline void Emmit(Args ...args)
 		{
-			this->Notify(std::forward<Args>(args)...);
+			std::lock_guard<std::mutex> lock(this->m_ObserversMut);
+
+			for (typename Base::SlotBaseType* obs : this->m_Observers)
+				obs->Update(args...);
 		}
 
 		friend Owner;

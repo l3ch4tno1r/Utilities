@@ -91,7 +91,7 @@ public:
 			obs->Update(std::forward<Args>(args)...);
 	}
 
-private:
+protected:
 	std::list<Obs*> m_Observers;
 	std::mutex      m_ObserversMut;
 };
