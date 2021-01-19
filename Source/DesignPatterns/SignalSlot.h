@@ -88,7 +88,7 @@ namespace LCN
 	private:
 		using Base = SignalBase<void(Args...)>;
 
-		inline void Emmit(Args ...args)
+		inline void Trigger(Args ...args)
 		{
 			std::lock_guard<std::mutex> lock(this->m_ObserversMut);
 
@@ -117,5 +117,9 @@ namespace LCN
 	#define VIRTUAL_SLOT(OwnerClass, Method, ...) \
 	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
 	virtual void Method(__VA_ARGS__);
+
+	#define ABSTRACT_SLOT(OwnerClass, Method, ...) \
+	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
+	virtual void Method(__VA_ARGS__) = 0;
 #pragma endregion
 }
