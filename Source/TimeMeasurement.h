@@ -31,13 +31,13 @@ long long ellapsed_micros = std::chrono::duration_cast<std::chrono::microseconds
 ///////////////////////
 class Timer
 {
-private:
-	std::chrono::steady_clock::time_point start;
-
 public:
 	Timer();
 
 	~Timer();
+
+protected:
+	std::chrono::steady_clock::time_point start;
 };
 
 class Timer2

@@ -2,7 +2,12 @@
 
 #include <exception>
 
+#ifdef DEBUG
 #define ASSERT(X) if(!(X)) __debugbreak()
+#else
+#define ASSERT(X)
+#endif // !DEBUG
+
 
 std::exception buildexception(const char* expr, const char* file, int line);
 
