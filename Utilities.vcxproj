@@ -77,6 +77,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="External\sqlite3\sqlite3.c" />
     <ClCompile Include="External\stb_image\stb_image.cpp" />
+    <ClCompile Include="Source\Benchmarking.cpp" />
     <ClCompile Include="Source\ConfigManager.cpp" />
     <ClCompile Include="Source\ErrorHandling.cpp" />
     <ClCompile Include="Source\TimeMeasurement.cpp" />
@@ -146,6 +148,7 @@
     <ClInclude Include="Source\SQLite\SQLiteDB.h" />
     <ClInclude Include="Source\TimeMeasurement.h" />
     <ClInclude Include="Source\TraceLog.h" />
+    <ClInclude Include="Source\TypeList.h" />
     <ClInclude Include="Source\Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
