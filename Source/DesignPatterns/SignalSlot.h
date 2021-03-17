@@ -7,6 +7,7 @@
 namespace LCN
 {
 #pragma region Slot
+
 	//////////////////
 	//-- SlotBase --//
 	//////////////////
@@ -58,9 +59,11 @@ namespace LCN
 		Owner&        m_Owner;
 		MethodPtrType m_Method;
 	};
+
 #pragma endregion
 
 #pragma region Signal
+
 	////////////////////
 	//-- SignalBase --//
 	////////////////////
@@ -98,9 +101,11 @@ namespace LCN
 
 		friend Owner;
 	};
+
 #pragma endregion
 
 #pragma region Utils
+
 	///////////////
 	//-- Utils --//
 	///////////////
@@ -110,16 +115,20 @@ namespace LCN
 
 	#define SLOT_INIT(SlotName, Method) SlotName(*this, &Method)
 
+	#define SLOT_BASE(OwnerClass, Method, ...)\
+	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method = { *this, &OwnerClass::Method };
+
 	#define SLOT(OwnerClass, Method, ...) \
-	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
-	void Method(__VA_ARGS__);
+	void Method(__VA_ARGS__);\
+	SLOT_BASE(OwnerClass, Method, __VA_ARGS__)
 
 	#define VIRTUAL_SLOT(OwnerClass, Method, ...) \
-	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
-	virtual void Method(__VA_ARGS__);
+	virtual void Method(__VA_ARGS__);\
+	SLOT_BASE(OwnerClass, Method, __VA_ARGS__)
 
 	#define ABSTRACT_SLOT(OwnerClass, Method, ...) \
-	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method;\
-	virtual void Method(__VA_ARGS__) = 0;
+	virtual void Method(__VA_ARGS__) = 0;\
+	SLOT_BASE(OwnerClass, Method, __VA_ARGS__)
+
 #pragma endregion
 }
