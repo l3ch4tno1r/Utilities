@@ -1,6 +1,7 @@
 #pragma once
 
-#include <list>
+#include <vector>
+#include <algorithm>
 #include <type_traits>
 #include <mutex>
 #include <exception>
@@ -21,6 +22,7 @@ class Observer
 {
 private:
 	using SubjectType = Subject<Obs>;
+	friend SubjectType;
 
 public:
 	virtual ~Observer()
@@ -29,6 +31,7 @@ public:
 			m_Subject->RemoveObserver(static_cast<Obs&>(*this));
 	}
 
+private:
 	void ConnectToSubject(SubjectType* subject)
 	{
 		if (m_Subject)
@@ -76,10 +79,12 @@ public:
 
 		obs.DisconnectFromSubject();
 
-		m_Observers.remove_if([&obs](const Obs* value)
-		{
-			return value == &obs;
-		});
+		auto it = std::find(m_Observers.begin(), m_Observers.end(), &obs);
+
+		if (it == m_Observers.end())
+			return;
+
+		m_Observers.erase(it);
 	}
 
 	template<typename ...Args>
@@ -92,6 +97,6 @@ public:
 	}
 
 protected:
-	std::list<Obs*> m_Observers;
-	std::mutex      m_ObserversMut;
+	std::vector<Obs*> m_Observers;
+	std::mutex        m_ObserversMut;
 };
