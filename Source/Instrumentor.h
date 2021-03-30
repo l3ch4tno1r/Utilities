@@ -29,7 +29,9 @@
 #define PROFILING 1
 
 #if PROFILING
-#define PROFILE_SCOPE(name) InstrumentationTimer time ## __LINE__(name)
+#define TOKENPASTE(x, y) x ## y
+#define TOKENPASTE2(x, y) TOKENPASTE(x, y)
+#define PROFILE_SCOPE(name) InstrumentationTimer TOKENPASTE2(timer, __LINE__)(name)
 #define PROFILE_FUNC() PROFILE_SCOPE(__FUNCSIG__)
 #else
 #define PROFILE_SCOPE(name)
