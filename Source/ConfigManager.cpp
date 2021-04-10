@@ -5,11 +5,11 @@
 
 #include "ConfigManager.h"
 
-namespace LCNUtilities
+namespace LCN::Utilities
 {
 	// Accessors
 
-	ConfigManager& ConfigManager::AppSettings()
+	ConfigManager& ConfigManager::Get()
 	{
 		static ConfigManager appsettings;
 		static std::once_flag flag;
