@@ -40,15 +40,15 @@ namespace LCN::Utilities
 
 		while (std::getline(configfile, line))
 		{
-			if (line.size() != 0)
-			{
-				std::stringstream ssdata(line);
-				std::string key, value;
+			if (line.size() == 0)
+				continue;
 
-				ssdata >> key >> value;
+			std::stringstream ssdata(line);
+			std::string key, value;
 
-				m_ConfigMap[key].Value(value);
-			}
+			ssdata >> key >> value;
+
+			m_ConfigMap[key].Value(value);
 		}
 	}
 
