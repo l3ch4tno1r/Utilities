@@ -14,7 +14,7 @@ namespace LCN::Benchmark
 		m_Session.m_SessionDurationNanos = std::chrono::duration_cast<std::chrono::nanoseconds>(end - m_Start).count();
 	}
 
-	long long Session::Duration(DurationUnit unit)
+	long long Session::Duration(DurationUnit unit) const
 	{
 		return m_SessionDurationNanos / unit;
 	}
