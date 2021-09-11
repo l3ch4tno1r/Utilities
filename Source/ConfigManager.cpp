@@ -5,11 +5,11 @@
 
 #include "ConfigManager.h"
 
-namespace LCNUtilities
+namespace LCN::Utilities
 {
 	// Accessors
 
-	ConfigManager& ConfigManager::AppSettings()
+	ConfigManager& ConfigManager::Get()
 	{
 		static ConfigManager appsettings;
 		static std::once_flag flag;
@@ -40,15 +40,15 @@ namespace LCNUtilities
 
 		while (std::getline(configfile, line))
 		{
-			if (line.size() != 0)
-			{
-				std::stringstream ssdata(line);
-				std::string key, value;
+			if (line.size() == 0)
+				continue;
 
-				ssdata >> key >> value;
+			std::stringstream ssdata(line);
+			std::string key, value;
 
-				m_ConfigMap[key].Value(value);
-			}
+			ssdata >> key >> value;
+
+			m_ConfigMap[key].Value(value);
 		}
 	}
 

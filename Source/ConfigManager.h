@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 
-namespace LCNUtilities
+namespace LCN::Utilities
 {
 	class ConfigManager
 	{
@@ -34,7 +34,7 @@ namespace LCNUtilities
 		};
 
 	public:
-		static ConfigManager& AppSettings();
+		static ConfigManager& Get();
 
 		Parameter& operator[](const std::string& key);
 

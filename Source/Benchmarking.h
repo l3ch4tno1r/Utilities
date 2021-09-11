@@ -16,7 +16,7 @@ namespace LCN::Benchmark
 	class Session
 	{
 	public:
-		long long Duration(DurationUnit unit);
+		long long Duration(DurationUnit unit) const;
 
 	private:
 		long long m_SessionDurationNanos;

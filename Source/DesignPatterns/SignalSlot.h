@@ -116,7 +116,7 @@ namespace LCN
 	#define SLOT_INIT(SlotName, Method) SlotName(*this, &Method)
 
 	#define SLOT_BASE(OwnerClass, Method, ...)\
-	Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method = { *this, &OwnerClass::Method };
+	LCN::Slot<OwnerClass, void(__VA_ARGS__)> Slot ## Method = { *this, &OwnerClass::Method };
 
 	#define SLOT(OwnerClass, Method, ...) \
 	void Method(__VA_ARGS__);\
