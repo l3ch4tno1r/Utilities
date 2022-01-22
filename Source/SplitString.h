@@ -58,20 +58,24 @@ namespace LCN
 
 		friend SplitResultType;
 
-		friend bool operator==(const Iterator& it1, const Iterator& it2)
+		friend bool operator==(
+			const Iterator& it1,
+			const Iterator& it2)
 		{
 			return &it1.m_SplitResult == &it2.m_SplitResult && it1.m_Start == it2.m_Start;
 		}
 
-		friend bool operator!=(const Iterator& it1, const Iterator& it2)
+		friend bool operator!=(
+			const Iterator& it1,
+			const Iterator& it2)
 		{
 			return !(it1 == it2);
 		}
 
 		Iterator& operator++()
 		{
-			StringViewType target{ m_SplitResult.m_Target };
-			StringViewType delimiter{ m_SplitResult.m_Delimiter };
+			const StringViewType& target{ m_SplitResult.m_Target };
+			const StringViewType& delimiter{ m_SplitResult.m_Delimiter };
 
 			m_Start = std::min(m_End + delimiter.size(), target.size());
 			m_End   = std::min(target.find(delimiter, m_Start), target.size());
