@@ -35,9 +35,6 @@ namespace LCN
 		friend BasicSplitResult<_CharType, _Traits> Split(const _CharType*, _StrType&&);
 
 		template<typename _CharType, typename _Traits, typename _StrType>
-		friend BasicSplitResult<_CharType, _Traits> Split(const _CharType(&)[], _StrType&&);
-
-		template<typename _CharType, typename _Traits, typename _StrType>
 		friend BasicSplitResult<_CharType, _Traits> Split(const std::basic_string<_CharType, _Traits>&, _StrType&&);
 
 		template<typename _CharType, typename _Traits, typename _StrType>
@@ -151,14 +148,6 @@ namespace LCN
 		_StrType&& delimiter)
 	{
 		return { ptr, std::forward<_StrType>(delimiter) };
-	}
-
-	template<typename _CharType, typename _Traits, typename _StrType>
-	BasicSplitResult<_CharType, _Traits> Split(
-		const _CharType(&ref)[],
-		_StrType&& delimiter)
-	{
-		return { ref, std::forward<_StrType>(delimiter) };
 	}
 
 	template<typename _CharType, typename _Traits, typename _StrType>
