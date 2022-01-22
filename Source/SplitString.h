@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <iterator>
 
 namespace LCN
 {
@@ -19,6 +20,16 @@ namespace LCN
 
 		Iterator begin() const { return { *this }; }
 		Iterator end()   const { return { *this, true }; }
+
+		size_t Count() const
+		{
+			Iterator it = this->begin(), end = this->end();
+			size_t count{ 0 };
+
+			for (; it != end; ++it, ++count);
+
+			return count;
+		}
 
 		template<typename _CharType, typename _Traits, typename _StrType>
 		friend BasicSplitResult<_CharType, _Traits> Split(const _CharType*, _StrType&&);
@@ -57,7 +68,15 @@ namespace LCN
 		using StringViewType  = typename SplitResultType::StringViewType;
 
 		friend SplitResultType;
+		
+	public:
+		using iterator_category = std::forward_iterator_tag;
+		using value_type        = StringViewType;
+		using difference_type   = int;
+		using pointer           = void;
+		using reference         = void;
 
+	public:
 		friend bool operator==(
 			const Iterator& it1,
 			const Iterator& it2)
@@ -97,6 +116,12 @@ namespace LCN
 			return { m_SplitResult.m_Target.data() + m_Start, m_End - m_Start };
 		}
 
+		Iterator(const Iterator& other) :
+			m_SplitResult{ other.m_SplitResult },
+			m_Start{ other.m_Start },
+			m_End{ other.m_End }
+		{}
+
 	private:
 		Iterator(const SplitResultType& splitResult) :
 			m_SplitResult(splitResult),
@@ -108,12 +133,6 @@ namespace LCN
 		Iterator(const SplitResultType& splitResult, bool) :
 			m_SplitResult{ splitResult },
 			m_Start{ splitResult.m_Target.size() }
-		{}
-
-		Iterator(const Iterator& other) :
-			m_SplitResult{ other.m_SplitResult },
-			m_Start{ other.m_Start },
-			m_End{ other.m_End }
 		{}
 
 	private:
@@ -163,6 +182,9 @@ namespace LCN
 	//-- Convenience using --//
 	///////////////////////////
 
-	using SplitStringResult  = BasicSplitResult<char>;
-	using SplitWStringResult = BasicSplitResult<wchar_t>;
+	using SplitStringResult    = BasicSplitResult<char>;
+	using SplitWStringResult   = BasicSplitResult<wchar_t>;
+	using Splitu8StringResult  = BasicSplitResult<char8_t>;
+	using Splitu16StringResult = BasicSplitResult<char16_t>;
+	using Splitu32StringResult = BasicSplitResult<char32_t>;
 }
