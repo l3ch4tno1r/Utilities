@@ -12,7 +12,7 @@ namespace LCN
 			std::string_view name{ __FUNCSIG__ };
 
 			size_t begin = name.find("NameOfType") + 11;
-			size_t end = name.find(">::", begin);
+			size_t end   = name.find(">::", begin);
 
 			return { name.data() + begin, end - begin };
 		}
