@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string_view>
+#include <type_traits>
 
 namespace LCN
 {
@@ -56,6 +57,54 @@ namespace LCN
 			char c = _Generator::Value(Idx);
 
 			return 'A' <= c && c <= 'Z' ? c - 'A' + 'a' : c;
+		}
+	};
+
+	template<typename _Generator>
+	struct ToUpper
+	{
+		static constexpr size_t Size() { return _Generator::Size(); }
+
+		static constexpr char Value(size_t Idx)
+		{
+			char c = _Generator::Value(Idx);
+
+			return 'a' <= c && c <= 'z' ? c - 'a' + 'A' : c;
+		}
+	};
+
+	////////////////////////////////////
+	//-- Integral to string literal --//
+	////////////////////////////////////
+
+	template<typename _Type, _Type, typename _Enable = void>
+	struct ToString;
+
+	template<typename _Integral, _Integral I>
+	struct ToString<_Integral, I, std::enable_if_t<std::is_integral_v<_Integral>>>
+	{
+		static constexpr size_t Size()
+		{
+			if (I == 0)
+				return 1;
+
+			_Integral result = 0;
+
+			for (_Integral i = I; i != 0; i /= 10)
+				++result;
+
+			return result + (I < 0);
+		}
+
+		static constexpr char Value(size_t Idx)
+		{
+			size_t idx = Size() - Idx - 1;
+			size_t div = 1;
+
+			for (size_t i = 0; i < idx; ++i)
+				div *= 10;
+
+			return (I / div) % 10 + '0';
 		}
 	};
 
