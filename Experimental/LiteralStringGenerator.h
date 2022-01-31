@@ -3,6 +3,8 @@
 #include <string_view>
 #include <type_traits>
 
+#include "Utilities/Source/TypeList.h"
+
 namespace LCN
 {
 	/////////////////
@@ -160,5 +162,59 @@ namespace LCN
 		static constexpr size_t Size() { return _Generator::Size(); }
 
 		static constexpr char Value(size_t Idx) { return _Generator::Value(Idx); }
+	};
+
+	////////////////////
+	//-- StringView --//
+	////////////////////
+
+	template<typename _Derived>
+	struct StringView
+	{
+		static constexpr std::string_view GetView() { return _Derived::GetView(); }
+
+		static constexpr size_t Size() { return GetView().size(); }
+
+		static constexpr char Value(size_t Idx) { return GetView()[Idx]; }
+	};
+
+	/////////////////////
+	//-- JoinLiteral --//
+	/////////////////////
+
+	template<typename _Separator, typename _GeneratorList>
+	struct JoinLiteral;
+
+	template<typename _Separator, typename _HeadGen, typename ... _TailGen>
+	struct JoinLiteral<_Separator, TypeList<_HeadGen, _TailGen...>>
+	{
+		using TypeListType   = TypeList<_HeadGen, _TailGen...>;
+		using ConcatType     = ConcatLiterals<_HeadGen, _TailGen...>;
+		using SubJoinLiteral = JoinLiteral<_Separator, typename TypeListType::Tail>;
+
+		static constexpr size_t Size() { return ConcatType::Size() + _Separator::Size() * (TypeListType::Count() - 1); }
+
+		static constexpr char Value(size_t Idx)
+		{
+			if (Idx < _HeadGen::Size())
+				return _HeadGen::Value(Idx);
+
+			Idx -= _HeadGen::Size();
+
+			if (Idx < _Separator::Size())
+				return _Separator::Value(Idx);
+
+			Idx -= _Separator::Size();
+
+			return SubJoinLiteral::Value(Idx);
+		}
+	};
+
+	template<typename _Separator, typename _SingleType>
+	struct JoinLiteral<_Separator, TypeList<_SingleType>>
+	{
+		static constexpr size_t Size() { return _SingleType::Size(); }
+
+		static constexpr char Value(size_t Idx) { return _SingleType::Value(Idx); }
 	};
 }
