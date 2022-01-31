@@ -96,7 +96,10 @@ namespace LCN
 			return result + (I < 0);
 		}
 
-		static constexpr char Value(size_t Idx)
+		template<typename _Integral>
+		static constexpr
+		std::enable_if_t<std::is_unsigned_v<_Integral>, char>
+		_Value(_Integral _I, size_t Idx)
 		{
 			size_t idx = Size() - Idx - 1;
 			size_t div = 1;
@@ -104,7 +107,27 @@ namespace LCN
 			for (size_t i = 0; i < idx; ++i)
 				div *= 10;
 
-			return (I / div) % 10 + '0';
+			return (_I / div) % 10 + '0';
+		}
+
+		template<typename _Integral>
+		static constexpr
+		std::enable_if_t<std::is_signed_v<_Integral>, char>
+		_Value(_Integral _I, size_t Idx)
+		{
+			using _UIntegral = std::make_unsigned_t<_Integral>;
+
+			if (Idx == 0 && _I < 0)
+				return '-';
+
+			_UIntegral _J = (_I < 0 ? -_I : _I);
+
+			return _Value(_J, Idx);
+		}
+
+		static constexpr char Value(size_t Idx)
+		{
+			return _Value(I, Idx);
 		}
 	};
 
