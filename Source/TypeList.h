@@ -28,14 +28,14 @@ namespace LCN
 	//-- Extract --//
 	/////////////////
 
-	template <size_t Idx, typename typelist>
+	template<size_t Idx, typename typelist>
 	struct Extract
 	{
 		using Result = typename Extract<Idx - 1, typename typelist::Tail>::Result;
 	};
 
-	template <typename typelist>
-	struct Extract <0, typelist>
+	template<typename typelist>
+	struct Extract<0, typelist>
 	{
 		using Result = typename typelist::Head;
 	};
