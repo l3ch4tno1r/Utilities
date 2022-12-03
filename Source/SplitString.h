@@ -142,24 +142,36 @@ namespace LCN
 	//-- Split proxy --//
 	/////////////////////
 
-	template<typename _CharType, typename _Traits = std::char_traits<_CharType>, typename _StrType>
-	BasicSplitResult<_CharType, _Traits> Split(
+	template<
+		typename _CharType,
+		typename _Traits = std::char_traits<_CharType>,
+		typename _StrType>
+	BasicSplitResult<_CharType, _Traits>
+	Split(
 		const _CharType* ptr,
 		_StrType&& delimiter)
 	{
 		return { ptr, std::forward<_StrType>(delimiter) };
 	}
 
-	template<typename _CharType, typename _Traits, typename _StrType>
-	BasicSplitResult<_CharType, _Traits> Split(
+	template<
+		typename _CharType,
+		typename _Traits,
+		typename _StrType>
+	BasicSplitResult<_CharType, _Traits>
+	Split(
 		const std::basic_string<_CharType, _Traits>& str,
 		_StrType&& delimiter)
 	{
 		return { str, std::forward<_StrType>(delimiter) };
 	}
 
-	template<typename _CharType, typename _Traits, typename _StrType>
-	BasicSplitResult<_CharType, _Traits> Split(
+	template<
+		typename _CharType,
+		typename _Traits,
+		typename _StrType>
+	BasicSplitResult<_CharType, _Traits>
+	Split(
 		const std::basic_string_view<_CharType, _Traits> strv,
 		_StrType&& delimiter)
 	{
