@@ -3,7 +3,7 @@
 #include <sstream>
 #include <mutex>
 
-#include "ConfigManager.h"
+#include "Utilities/ConfigManager.h"
 
 namespace LCN::Utilities
 {

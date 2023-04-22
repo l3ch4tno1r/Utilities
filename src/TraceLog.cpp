@@ -4,7 +4,7 @@
 #include <iomanip>
 #include <iostream>
 
-#include "TraceLog.h"
+#include "Utilities/TraceLog.h"
 
 #define TEST
 
