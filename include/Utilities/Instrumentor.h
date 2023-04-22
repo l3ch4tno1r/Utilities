@@ -26,9 +26,7 @@
 
 #include "ErrorHandling.h"
 
-#define PROFILING 1
-
-#if PROFILING
+#ifdef PROFILING
 #define TOKENPASTE(x, y) x ## y
 #define TOKENPASTE2(x, y) TOKENPASTE(x, y)
 #define PROFILE_SCOPE(name) InstrumentationTimer TOKENPASTE2(timer, __LINE__)(name)
