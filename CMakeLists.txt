@@ -7,7 +7,8 @@ set(SOURCES
     src/ConfigManager.cpp
     src/ErrorHandling.cpp
     src/TimeMeasurement.cpp
-    src/TraceLog.cpp)
+    src/TraceLog.cpp
+    src/Profiler.cpp)
 
 add_library(${THIS} STATIC ${SOURCES})
 
