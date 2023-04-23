@@ -1,5 +1,5 @@
-project("UtilityLib" VERSION 2.0.0)
-set(THIS "UtilityLib")
+set(THIS "UtilitiesLib")
+project(${THIS} VERSION 2.0.0)
 
 set(CMAKE_CXX_STANDARD 20)
 
