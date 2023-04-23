@@ -46,6 +46,7 @@ namespace LCN::Utilities
 	/**
 	 * @class ThreadSafe<_DataType, _MtxType>
 	 * @brief Class that holds data in a multi thread environnement.
+	 * @brief This class provides an interface through the Lock method that allows to access its elements through pointer like Locker object.
 	*/
 	template<
 		typename _DataType,
@@ -73,6 +74,7 @@ namespace LCN::Utilities
 	/**
 	 * @brief Convenience function to create a wrapping ThreadSafe object.
 	 * @param args Variadic arguments to be passed to the ThreadSafe constructor.
+	 * @return ThreadSafe object
 	*/
 	template<
 		typename _DataType,
