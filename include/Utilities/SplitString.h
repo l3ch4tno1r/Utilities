@@ -32,13 +32,25 @@ namespace LCN
 		}
 
 		template<typename _CharType, typename _Traits, typename _StrType>
-		friend BasicSplitResult<_CharType, _Traits> Split(const _CharType*, _StrType&&);
+		friend
+		BasicSplitResult<_CharType, _Traits>
+		Split(
+			const _CharType*,
+			_StrType&&);
 
 		template<typename _CharType, typename _Traits, typename _StrType>
-		friend BasicSplitResult<_CharType, _Traits> Split(const std::basic_string<_CharType, _Traits>&, _StrType&&);
+		friend
+		BasicSplitResult<_CharType, _Traits>
+		Split(
+			const std::basic_string<_CharType, _Traits>&,
+			_StrType&&);
 
 		template<typename _CharType, typename _Traits, typename _StrType>
-		friend BasicSplitResult<_CharType, _Traits> Split(const std::basic_string_view<_CharType, _Traits>, _StrType&&);
+		friend
+		BasicSplitResult<_CharType, _Traits>
+		Split(
+			const std::basic_string_view<_CharType, _Traits>,
+			_StrType&&);
 
 	private:
 		template<typename _StrArgType1, typename _StrArgType2>
@@ -135,7 +147,7 @@ namespace LCN
 	private:
 		const SplitResultType& m_SplitResult;
 
-		size_t m_Start{ 0 }, m_End{ StringType::npos };
+		size_t m_Start{ 0 }, m_End{ StringViewType::npos };
 	};
 
 	/////////////////////
