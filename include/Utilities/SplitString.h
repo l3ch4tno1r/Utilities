@@ -178,7 +178,6 @@ namespace LCN
 		return { strv, std::forward<_StrType>(delimiter) };
 	}
 
-
 	///////////////////////////
 	//-- Convenience using --//
 	///////////////////////////
