@@ -5,7 +5,7 @@ namespace LCN::Utilities
     class ThreadWatcher
     {
     public:
-        //static void Initialize() {};
+        static void Initialize();
 
     private:
         ThreadWatcher();

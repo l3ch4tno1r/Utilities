@@ -6,6 +6,8 @@
 namespace LCN::Utilities
 {
     thread_local ThreadWatcher ThreadWatcher::watcher{};
+
+    void ThreadWatcher::Initialize() {}
     
     ThreadWatcher::ThreadWatcher()
     {
