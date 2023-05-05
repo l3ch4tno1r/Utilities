@@ -1,12 +1,12 @@
-#include "Utilities/ErrorHandling.h"
-
 #include <sstream>
 
-std::exception buildexception(const char* expr, const char* file, int line)
+#include "Utilities/ErrorHandling.h"
+
+std::runtime_error buildexception(const char* expr, const char* file, int line)
 {
 	std::stringstream msg;
 
 	msg << expr << " | " << file << " | " << line;
 
-	return std::exception(msg.str().c_str());
+	return std::runtime_error(msg.str().c_str());
 }

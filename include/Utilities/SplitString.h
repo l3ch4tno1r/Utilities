@@ -31,26 +31,26 @@ namespace LCN
 			return count;
 		}
 
-		template<typename _CharType, typename _Traits, typename _StrType>
+		template<typename _CharType_, typename _Traits_, typename _StrType_>
 		friend
-		BasicSplitResult<_CharType, _Traits>
+		BasicSplitResult<_CharType_, _Traits_>
 		Split(
-			const _CharType*,
-			_StrType&&);
+			const _CharType_*,
+			_StrType_&&);
 
-		template<typename _CharType, typename _Traits, typename _StrType>
+		template<typename _CharType_, typename _Traits_, typename _StrType_>
 		friend
-		BasicSplitResult<_CharType, _Traits>
+		BasicSplitResult<_CharType_, _Traits_>
 		Split(
-			const std::basic_string<_CharType, _Traits>&,
-			_StrType&&);
+			const std::basic_string<_CharType_, _Traits_>&,
+			_StrType_&&);
 
-		template<typename _CharType, typename _Traits, typename _StrType>
+		template<typename _CharType_, typename _Traits_, typename _StrType_>
 		friend
-		BasicSplitResult<_CharType, _Traits>
+		BasicSplitResult<_CharType_, _Traits_>
 		Split(
-			const std::basic_string_view<_CharType, _Traits>,
-			_StrType&&);
+			const std::basic_string_view<_CharType_, _Traits_>,
+			_StrType_&&);
 
 	private:
 		template<typename _StrArgType1, typename _StrArgType2>

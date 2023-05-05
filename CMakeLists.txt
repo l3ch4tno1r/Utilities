@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(SOURCES
     src/ConfigManager.cpp
     src/ErrorHandling.cpp
-    src/TimeMeasurement.cpp
+    #src/TimeMeasurement.cpp
     src/TraceLog.cpp
     src/Profiler.cpp
     src/ThreadWatcher.cpp)

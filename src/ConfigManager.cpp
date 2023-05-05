@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <mutex>
+#include <stdexcept>
 
 #include "Utilities/ConfigManager.h"
 
@@ -34,7 +35,7 @@ namespace LCN::Utilities
 		std::ifstream configfile("config.txt", std::ios::in);
 
 		if (!configfile)
-			throw std::exception("Cannot open config.txt file.");
+			throw std::runtime_error("Cannot open config.txt file.");
 
 		std::string line;
 

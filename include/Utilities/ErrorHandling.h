@@ -1,6 +1,6 @@
 #pragma once
 
-#include <exception>
+#include <stdexcept>
 
 #ifdef DEBUG
 #define ASSERT(X) if(!(X)) __debugbreak()
@@ -9,7 +9,7 @@
 #endif // !DEBUG
 
 
-std::exception buildexception(const char* expr, const char* file, int line);
+std::runtime_error buildexception(const char* expr, const char* file, int line);
 
 #define THROWEXCEPTIF(X) if(X) throw buildexception(#X, __FILE__, __LINE__);
 
