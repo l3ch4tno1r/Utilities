@@ -18,6 +18,10 @@ namespace LCN
 
 		class Iterator;
 
+		using value_type     = StringViewType;
+		using iterator       = Iterator;
+		using const_iterator = Iterator;
+
 		Iterator begin() const { return { *this }; }
 		Iterator end()   const { return { *this, true }; }
 
@@ -84,7 +88,7 @@ namespace LCN
 		using difference_type   = int;
 		using pointer           = void;
 		using reference         = void;
-
+		
 	public:
 		friend bool operator==(
 			const Iterator& it1,
