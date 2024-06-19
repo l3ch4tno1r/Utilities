@@ -1,206 +1,137 @@
 #pragma once
 
 #include <string_view>
-#include <iterator>
+#include <ranges>
 
 namespace LCN
 {
-	//////////////////////////
-	//-- BasicSplitResult --//
-	//////////////////////////
+    /////////////////////
+    //-- Declaration --//
+    /////////////////////
 
-	template<typename _CharType, typename _Traits = std::char_traits<_CharType>>
-	class BasicSplitResult
-	{
-	public:
-		using StringType     = std::basic_string<_CharType, _Traits>;
-		using StringViewType = std::basic_string_view<_CharType, _Traits>;
+    template<typename _StringViewType>
+    class BasicSplitResult;
 
-		class Iterator;
+    template<
+        typename _CharType,
+        typename _CharTraits>
+    class BasicSplitResult<std::basic_string_view<_CharType, _CharTraits>> : public std::ranges::view_base
+    {
+    public:
+        using StringViewType = std::basic_string_view<_CharType, _CharTraits>;
 
-		using value_type     = StringViewType;
-		using iterator       = Iterator;
-		using const_iterator = Iterator;
+    public:
+        BasicSplitResult(const StringViewType view, const StringViewType delim)
+            : m_view{ view }
+            , m_delimiter{ delim }
+        {}
 
-		Iterator begin() const { return { *this }; }
-		Iterator end()   const { return { *this, true }; }
+    public:
 
-		size_t Count() const
-		{
-			Iterator it = this->begin(), end = this->end();
-			size_t count{ 0 };
+        class Iterator
+        {
+        public:
+            using StringViewType  = std::basic_string_view<_CharType, _CharTraits>;
+            using difference_type = std::ptrdiff_t;
+            using value_type      = StringViewType;
+        
+        public:
+            Iterator() = default;
 
-			for (; it != end; ++it, ++count);
+            Iterator(const Iterator& other) = default;
 
-			return count;
-		}
+            Iterator(const StringViewType view, const StringViewType delim)
+                : m_view{ view }
+                , m_delimiter{ delim }
+                , m_offset{ 0 }
+                , m_size{ view.find(delim) }
+            {}
 
-		template<typename _CharType_, typename _Traits_, typename _StrType_>
-		friend
-		BasicSplitResult<_CharType_, _Traits_>
-		Split(
-			const _CharType_*,
-			_StrType_&&);
+        public:
+            Iterator& operator++()
+            {
+                m_offset += m_size + m_delimiter.size();
 
-		template<typename _CharType_, typename _Traits_, typename _StrType_>
-		friend
-		BasicSplitResult<_CharType_, _Traits_>
-		Split(
-			const std::basic_string<_CharType_, _Traits_>&,
-			_StrType_&&);
+                if(m_offset > m_view.size())
+                    return *this = Iterator{};            
 
-		template<typename _CharType_, typename _Traits_, typename _StrType_>
-		friend
-		BasicSplitResult<_CharType_, _Traits_>
-		Split(
-			const std::basic_string_view<_CharType_, _Traits_>,
-			_StrType_&&);
+                auto substring = m_view.substr(m_offset);
 
-	private:
-		template<typename _StrArgType1, typename _StrArgType2>
-		BasicSplitResult(_StrArgType1&& target, _StrArgType2&& delimiter) :
-			m_Target{ std::forward<_StrArgType1>(target) },
-			m_Delimiter{ std::forward<_StrArgType2>(delimiter) }
-		{}
+                m_size = std::min(
+                    substring.size(),
+                    substring.find(m_delimiter));
 
-	private:
-		StringViewType m_Target;
-		StringViewType m_Delimiter;
-	};
+                return *this;
+            }
 
-	//////////////////
-	//-- Iterator --//
-	//////////////////
+            Iterator operator++(int)
+            {
+                Iterator result{ *this };
 
-	template<typename _CharType, typename _Traits>
-	class BasicSplitResult<_CharType, _Traits>::Iterator
-	{
-	public:
-		using SplitResultType = BasicSplitResult<_CharType, _Traits>;
-		using StringType      = typename SplitResultType::StringType;
-		using StringViewType  = typename SplitResultType::StringViewType;
+                ++(*this);
 
-		friend SplitResultType;
-		
-	public:
-		using iterator_category = std::forward_iterator_tag;
-		using value_type        = StringViewType;
-		using difference_type   = int;
-		using pointer           = void;
-		using reference         = void;
-		
-	public:
-		friend bool operator==(
-			const Iterator& it1,
-			const Iterator& it2)
-		{
-			return &it1.m_SplitResult == &it2.m_SplitResult && it1.m_Start == it2.m_Start;
-		}
+                return result;
+            }
 
-		friend bool operator!=(
-			const Iterator& it1,
-			const Iterator& it2)
-		{
-			return !(it1 == it2);
-		}
+            const bool operator==(const Iterator& other) const
+            {
+                return
+                    m_offset == other.m_offset &&
+                    m_size   == other.m_size;
+            }
 
-		Iterator& operator++()
-		{
-			const StringViewType& target{ m_SplitResult.m_Target };
-			const StringViewType& delimiter{ m_SplitResult.m_Delimiter };
+            const StringViewType operator*() const { return m_view.substr(m_offset, m_size); }
+        
+        private:
+            StringViewType m_view;
+            StringViewType m_delimiter;
 
-			m_Start = std::min(m_End + delimiter.size(), target.size());
-			m_End   = std::min(target.find(delimiter, m_Start), target.size());
+            size_t m_offset{ StringViewType::npos }, m_size{ StringViewType::npos };
+        };
 
-			return *this;
-		}
+        using iterator = Iterator;
 
-		Iterator operator++(int)
-		{
-			Iterator result{ *this };
+        const size_t Count() const
+        {
+            return std::distance(this->begin(), this->end());
+        }
 
-			++(*this);
+        Iterator begin() const
+        {
+            return { m_view, m_delimiter };
+        }
 
-			return result;
-		}
+        Iterator end() const
+        {
+            return {};
+        }
 
-		StringViewType operator*() const
-		{
-			return { m_SplitResult.m_Target.data() + m_Start, m_End - m_Start };
-		}
+    private:
+        StringViewType m_view;
+        StringViewType m_delimiter;
+    };
 
-		Iterator(const Iterator& other) :
-			m_SplitResult{ other.m_SplitResult },
-			m_Start{ other.m_Start },
-			m_End{ other.m_End }
-		{}
+    /////////////////////
+    //-- Convenience --//
+    /////////////////////
 
-	private:
-		Iterator(const SplitResultType& splitResult) :
-			m_SplitResult(splitResult),
-			m_End(std::min(
-				splitResult.m_Target.find(splitResult.m_Delimiter),
-				splitResult.m_Target.size()))
-		{}
+    using SplitResult  = BasicSplitResult<std::string_view>;
+    using WSplitResult = BasicSplitResult<std::wstring_view>;
 
-		Iterator(const SplitResultType& splitResult, bool) :
-			m_SplitResult{ splitResult },
-			m_Start{ splitResult.m_Target.size() }
-		{}
+    SplitResult
+    Split(
+        const std::string_view view,
+        const std::string_view delim)
+    {
+        std::basic_string_view sv{ "" };
+        return { view, delim };
+    }
 
-	private:
-		const SplitResultType& m_SplitResult;
-
-		size_t m_Start{ 0 }, m_End{ StringViewType::npos };
-	};
-
-	/////////////////////
-	//-- Split proxy --//
-	/////////////////////
-
-	template<
-		typename _CharType,
-		typename _Traits = std::char_traits<_CharType>,
-		typename _StrType>
-	BasicSplitResult<_CharType, _Traits>
-	Split(
-		const _CharType* ptr,
-		_StrType&& delimiter)
-	{
-		return { ptr, std::forward<_StrType>(delimiter) };
-	}
-
-	template<
-		typename _CharType,
-		typename _Traits,
-		typename _StrType>
-	BasicSplitResult<_CharType, _Traits>
-	Split(
-		const std::basic_string<_CharType, _Traits>& str,
-		_StrType&& delimiter)
-	{
-		return { str, std::forward<_StrType>(delimiter) };
-	}
-
-	template<
-		typename _CharType,
-		typename _Traits,
-		typename _StrType>
-	BasicSplitResult<_CharType, _Traits>
-	Split(
-		const std::basic_string_view<_CharType, _Traits> strv,
-		_StrType&& delimiter)
-	{
-		return { strv, std::forward<_StrType>(delimiter) };
-	}
-
-	///////////////////////////
-	//-- Convenience using --//
-	///////////////////////////
-
-	using SplitStringResult    = BasicSplitResult<char>;
-	using SplitWStringResult   = BasicSplitResult<wchar_t>;
-	using Splitu8StringResult  = BasicSplitResult<char8_t>;
-	using Splitu16StringResult = BasicSplitResult<char16_t>;
-	using Splitu32StringResult = BasicSplitResult<char32_t>;
+    WSplitResult
+    Split(
+        const std::wstring_view view,
+        const std::wstring_view delim)
+    {
+        return { view, delim };
+    }
 }
