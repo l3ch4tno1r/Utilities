@@ -10,31 +10,42 @@ namespace LCN::UnitTests
     TEST(SplitString, Nominal)
     {
         constexpr std::string_view input{ "Hello world !" };
-        auto split = LCN::Split(input, " ");
+        auto tokens = LCN::Split(input, " ");
 
-        ASSERT_EQ(split.Count(), 3);
+        ASSERT_EQ(tokens.Count(), 3);
 
-        auto it = split.begin();
+        auto it = tokens.begin();
 
         EXPECT_EQ(*(it++), "Hello");
         EXPECT_EQ(*(it++), "world");
         EXPECT_EQ(*(it++), "!");
 
-        ASSERT_EQ(it, split.end());
+        ASSERT_EQ(it, tokens.end());
+    }
+
+    TEST(SplitString, EmptyString)
+    {
+        constexpr std::string_view input{ "" };
+        auto tokens = LCN::Split(input, ";");
+        
+        // Might be controversial, but one can consider that an empty string contains only one token that is empty.
+        ASSERT_EQ(tokens.Count(), 1);
     }
 
     TEST(SplitString, NothingToSplit)
     {
         constexpr std::string_view str{ "Nothing to split here !" };
-        auto split = LCN::Split(str, ";");
+        auto tokens = LCN::Split(str, ";");
 
-        EXPECT_EQ(*(split.begin()), str);
+        ASSERT_EQ(tokens.Count(), 1);
+        
+        EXPECT_EQ(*(tokens.begin()), str);
     }
 
     TEST(SplitString, Iterating)
     {
         constexpr std::string_view csv{ "Joe;Jack;William;Averell" };
-        auto split = LCN::Split(csv, ";");
+        auto tokens = LCN::Split(csv, ";");
 
         constexpr std::string_view expected[] = {
             "Joe",
@@ -43,32 +54,32 @@ namespace LCN::UnitTests
             "Averell"
         };
 
-        ASSERT_EQ(split.Count(), 4);
+        ASSERT_EQ(tokens.Count(), 4);
 
         auto it = std::begin(expected);
 
-        for(const auto sv : split)
+        for(const auto sv : tokens)
             EXPECT_EQ(*(it++), sv);
     }
 
     TEST(SplitString, Range)
     {
         constexpr std::string_view csv{ "1;2;3;4;5;6" };
-        auto split = LCN::Split(csv, ";");
+        auto tokens = LCN::Split(csv, ";");
 
-        static_assert(std::input_or_output_iterator<decltype(split)::iterator>);
-        static_assert(std::input_iterator<decltype(split)::iterator>);
-        static_assert(std::forward_iterator<decltype(split)::iterator>);
+        static_assert(std::input_or_output_iterator<decltype(tokens)::iterator>);
+        static_assert(std::input_iterator<decltype(tokens)::iterator>);
+        static_assert(std::forward_iterator<decltype(tokens)::iterator>);
         
-        static_assert(std::ranges::range<decltype(split)>);
-        static_assert(std::ranges::view<decltype(split)>);
-        static_assert(std::ranges::viewable_range<decltype(split)>);
+        static_assert(std::ranges::range<decltype(tokens)>);
+        static_assert(std::ranges::view<decltype(tokens)>);
+        static_assert(std::ranges::viewable_range<decltype(tokens)>);
     
-        auto splitRange = split
+        auto tokensRange = tokens
             | std::ranges::views::take(3);
         
-        auto it  = splitRange.begin();
-        auto end = splitRange.end();
+        auto it  = tokensRange.begin();
+        auto end = tokensRange.end();
 
         ASSERT_NE(it, end);
 
@@ -83,7 +94,7 @@ namespace LCN::UnitTests
     {
         constexpr std::string_view csv{ "1;2;;3;4;;;5;"};
         
-        auto split = LCN::Split(csv, ";")
+        auto tokens = LCN::Split(csv, ";")
             | std::ranges::views::transform([](const std::string_view sv) -> std::optional<int>
             {
                 int value;
@@ -102,7 +113,7 @@ namespace LCN::UnitTests
         
         int expected = 1;
 
-        for(const int i : split)
+        for(const int i : tokens)
             EXPECT_EQ(i, expected++);
     }
 
@@ -110,35 +121,35 @@ namespace LCN::UnitTests
     {
         constexpr std::string_view data{ "Joe;Jack;;William;;;Averell;" };
 
-        auto split = LCN::Split(data, ";")
+        auto tokens = LCN::Split(data, ";")
             | std::ranges::views::filter([](const auto sv)
             {
                 return not sv.empty();
             });
         
-        std::vector<std::string> tokens{ split.begin(), split.end() };
+        std::vector<std::string> result{ tokens.begin(), tokens.end() };
 
-        ASSERT_EQ(tokens.size(), 4);
+        ASSERT_EQ(result.size(), 4);
         
-        EXPECT_EQ(tokens[0], "Joe");
-        EXPECT_EQ(tokens[1], "Jack");
-        EXPECT_EQ(tokens[2], "William");
-        EXPECT_EQ(tokens[3], "Averell");
+        EXPECT_EQ(result[0], "Joe");
+        EXPECT_EQ(result[1], "Jack");
+        EXPECT_EQ(result[2], "William");
+        EXPECT_EQ(result[3], "Averell");
     }
 
     TEST(SplitString, WideStrings)
     {
         constexpr std::basic_string_view data{ L"Hello world !" };
-        auto split = LCN::Split(data, L" ");
+        auto tokens = LCN::Split(data, L" ");
 
-        ASSERT_EQ(split.Count(), 3);
+        ASSERT_EQ(tokens.Count(), 3);
 
-        auto it = split.begin();
+        auto it = tokens.begin();
 
         EXPECT_EQ(*(it++), L"Hello");
         EXPECT_EQ(*(it++), L"world");
         EXPECT_EQ(*(it++), L"!");
 
-        EXPECT_EQ(it, split.end());
+        EXPECT_EQ(it, tokens.end());
     }
 }

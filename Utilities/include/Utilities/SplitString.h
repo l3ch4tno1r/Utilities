@@ -15,7 +15,8 @@ namespace LCN
     template<
         typename _CharType,
         typename _CharTraits>
-    class BasicSplitResult<std::basic_string_view<_CharType, _CharTraits>> : public std::ranges::view_base
+    class BasicSplitResult<std::basic_string_view<_CharType, _CharTraits>>
+        : public std::ranges::view_base
     {
     public:
         using StringViewType = std::basic_string_view<_CharType, _CharTraits>;
@@ -25,6 +26,9 @@ namespace LCN
             : m_view{ view }
             , m_delimiter{ delim }
         {}
+    
+    private:
+        struct CreateAsSentinel{};
 
     public:
 
@@ -44,7 +48,14 @@ namespace LCN
                 : m_view{ view }
                 , m_delimiter{ delim }
                 , m_offset{ 0 }
-                , m_size{ view.find(delim) }
+                , m_size{ std::min(
+                    view.find(delim),
+                    view.size()) }
+            {}
+
+            Iterator(const CreateAsSentinel)
+                : m_offset{ StringViewType::npos }
+                , m_size{ StringViewType::npos }
             {}
 
         public:
@@ -53,7 +64,7 @@ namespace LCN
                 m_offset += m_size + m_delimiter.size();
 
                 if(m_offset > m_view.size())
-                    return *this = Iterator{};            
+                    return *this = Iterator{ CreateAsSentinel{} };
 
                 auto substring = m_view.substr(m_offset);
 
@@ -86,7 +97,8 @@ namespace LCN
             StringViewType m_view;
             StringViewType m_delimiter;
 
-            size_t m_offset{ StringViewType::npos }, m_size{ StringViewType::npos };
+            size_t m_offset{ 0 };
+            size_t m_size{ 0 };
         };
 
         using iterator = Iterator;
@@ -103,7 +115,7 @@ namespace LCN
 
         Iterator end() const
         {
-            return {};
+            return { CreateAsSentinel{} };
         }
 
     private:
