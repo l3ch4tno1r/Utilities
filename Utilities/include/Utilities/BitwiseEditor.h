@@ -2,57 +2,55 @@
 
 namespace LCN
 {
-	template<std::integral>
-	class BitRef;
-
 	template<std::integral _Int>
-	class BitwiseEditor
+	class Bitwise
 	{
 	public:
-		using ValType = _Int;
-		using RefType = ValType&;
-
-		using BitRefType      = BitRef<std::remove_const_t<_Int>>;
-		using ConstBitRefType = BitRef<const std::remove_const_t<_Int>>;
-
-		constexpr
-		BitwiseEditor(RefType target)
-			: m_Target{ target }
+		Bitwise(_Int& target)
+			: m_target{ target }
 		{}
 
-		BitRefType operator[](uint32_t);
-
-	private:
-		RefType m_Target;
-	};
-
-	template<std::integral _Int>
-	class BitRef
-	{
 	public:
-		using ValType = _Int;
-		using RefType = ValType&;
+		class BitRef
+		{
+		public:
+			void
+			operator=(
+				const bool value) const
+			{
+				static_assert(not std::is_const_v<_Int>, "Cannot edit a const value.");
+
+				_Int mask = 1 << m_idx;
+
+				m_target = (m_target & ~mask) | (value << m_idx);
+			}
+
+			operator const bool () const
+			{
+				return (1 << m_idx) & m_target;
+			}
+		
+		private:
+			_Int& m_target;
+			const std::size_t m_idx;
+		
+		private:
+			BitRef(_Int& target, const std::size_t idx)
+				: m_target{ target }
+				, m_idx{ idx }
+			{}
+
+			friend Bitwise;
+		};
+
+		BitRef
+		operator[](
+			const size_t idx) const
+		{
+			return { m_target, idx };
+		}
 
 	private:
-		constexpr
-		BitRef(RefType target, const uint32_t idx)
-			: m_Target{ target }
-			, m_Idx{ idx }
-		{}
-
-		template<std::integral _Int2>
-		friend BitwiseEditor<_Int2>;
-
-	private:
-		RefType m_Target;
-		const uint32_t m_Idx;
+		_Int& m_target;
 	};
-
-	template<std::integral _Int>
-	typename BitwiseEditor<_Int>::BitRefType
-	BitwiseEditor<_Int>::operator[](
-		uint32_t idx)
-	{
-		return { this->m_Target, idx };
-	}
 }

@@ -120,14 +120,17 @@ namespace LCN::UnitTests
     TEST(SplitString, ConversionToVector)
     {
         constexpr std::string_view data{ "Joe;Jack;;William;;;Averell;" };
+        auto tokens = LCN::Split(data, ";");
+        
+        ASSERT_EQ(tokens.Count(), 8);        
 
-        auto tokens = LCN::Split(data, ";")
+        auto tokenRange = tokens
             | std::ranges::views::filter([](const auto sv)
             {
                 return not sv.empty();
             });
         
-        std::vector<std::string> result{ tokens.begin(), tokens.end() };
+        std::vector<std::string> result{ tokenRange.begin(), tokenRange.end() };
 
         ASSERT_EQ(result.size(), 4);
         

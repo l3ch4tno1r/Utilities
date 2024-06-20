@@ -8,6 +8,7 @@ if(NOT GTest_FOUND)
 endif()
 
 add_executable(${THIS_TEST}
+    src/BitwiseEditor.cpp
     src/SplitString.cpp)
 
 target_link_libraries(${THIS_TEST} PRIVATE
