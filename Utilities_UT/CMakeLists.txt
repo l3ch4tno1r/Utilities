@@ -1,4 +1,4 @@
-set(THIS_TEST UtilitiesTest)
+set(TEST UtilitiesUT)
 set(CMAKE_CXX_STANDARD 20)
 
 find_package(GTest)
@@ -7,11 +7,12 @@ if(NOT GTest_FOUND)
     return()
 endif()
 
-add_executable(${THIS_TEST}
+add_executable(${TEST}
+    src/Arguments.cpp
     src/BitwiseEditor.cpp
     src/SplitString.cpp)
 
-target_link_libraries(${THIS_TEST} PRIVATE
+target_link_libraries(${TEST} PRIVATE
     GTest::gtest
     GTest::gtest_main
     UtilitiesLib)
