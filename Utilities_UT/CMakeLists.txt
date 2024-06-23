@@ -10,7 +10,8 @@ endif()
 add_executable(${TEST}
     src/Arguments.cpp
     src/BitwiseEditor.cpp
-    src/SplitString.cpp)
+    src/SplitString.cpp
+    src/Units.cpp)
 
 target_link_libraries(${TEST} PRIVATE
     GTest::gtest
