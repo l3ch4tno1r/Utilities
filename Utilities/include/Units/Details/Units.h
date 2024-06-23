@@ -19,8 +19,8 @@ namespace LCN::Units
 	template<
 		typename _MeasurementType,
 		typename _Type,
-		typename _Ratio,
-		std::enable_if_t<std::is_arithmetic_v<_Type>, bool> = true>
+		typename _Ratio>
+	requires std::is_arithmetic_v<_Type>
 	class Unit
 	{
 	public:
@@ -168,16 +168,16 @@ namespace LCN::Units
 		typename _Type1, typename _Ratio1,
 		typename _Type2, typename _Ratio2>
 	constexpr
-	std::common_type_t<
-		Unit<_MeasurementType, _Type1, _Ratio1>,
-		Unit<_MeasurementType, _Type2, _Ratio2>>
+	auto
 	operator-(
 		const Unit<_MeasurementType, _Type1, _Ratio1>& left,
 		const Unit<_MeasurementType, _Type2, _Ratio2>& right)
 	{
-		using ReturnType = typename std::common_type<Unit<_MeasurementType, _Type1, _Ratio1>, Unit<_MeasurementType, _Type2, _Ratio2>>::type;
+		using ReturnType = typename CommonType<
+			Unit<_MeasurementType, _Type1, _Ratio1>,
+			Unit<_MeasurementType, _Type2, _Ratio2>>::Type;
 
-		return ReturnType(ReturnType(left).Count() - ReturnType(right).Count());
+		return ReturnType{ ReturnType{ left }.Count() - ReturnType{ right }.Count() };
 	}
 
 	template<
@@ -186,7 +186,7 @@ namespace LCN::Units
 		typename _Type2,
 		typename _Ratio2>
 	constexpr
-	Unit<_MeasurementType, std::common_type_t<_Type1, _Type2>, _Ratio2>
+	auto
 	operator*(
 		const _Type1& factor,
 		const Unit<_MeasurementType, _Type2, _Ratio2>& measure)
@@ -194,7 +194,7 @@ namespace LCN::Units
 		using CommonType = std::common_type_t<_Type1, _Type2>;
 		using ReturnType = Unit<_MeasurementType, CommonType, _Ratio2>;
 
-		return ReturnType(factor * ReturnType(measure).Count());
+		return ReturnType{ factor * ReturnType{ measure }.Count() };
 	}
 
 	template<
@@ -204,7 +204,7 @@ namespace LCN::Units
 		typename _Type2>
 	inline
 	constexpr
-	Unit<_MeasurementType, std::common_type_t<_Type1, _Type2>, _Ratio1>
+	auto
 	operator*(
 		const Unit<_MeasurementType, _Type1, _Ratio1>& measure,
 		const _Type2& factor)
@@ -218,7 +218,7 @@ namespace LCN::Units
 		typename _Ratio1,
 		typename _Type2>
 	constexpr
-	Unit<_MeasurementType, std::common_type_t<_Type1, _Type2>, _Ratio1>
+	auto
 	operator/(
 		const Unit<_MeasurementType, _Type1, _Ratio1>& measure,
 		const _Type2& factor)
@@ -226,7 +226,7 @@ namespace LCN::Units
 		using CommonType = std::common_type_t<_Type1, _Type2>;
 		using ReturnType = Unit<_MeasurementType, CommonType, _Ratio1>;
 
-		return ReturnType(ReturnType(measure).Count() / factor);
+		return ReturnType{ ReturnType{ measure }.Count() / factor };
 	}
 
 	template<
@@ -235,7 +235,7 @@ namespace LCN::Units
 		typename _Ratio1,
 		typename _Type2>
 	constexpr
-	Unit<_MeasurementType, std::common_type_t<_Type1, _Type2>, _Ratio1>
+	auto
 	operator%(
 		const Unit<_MeasurementType, _Type1, _Ratio1>& measure,
 		const _Type2& divider)
@@ -243,7 +243,7 @@ namespace LCN::Units
 		using CommonType = std::common_type_t<_Type1, _Type2>;
 		using ReturnType = Unit<_MeasurementType, CommonType, _Ratio1>;
 
-		return ReturnType(ReturnType(measure).Count() % divider);
+		return ReturnType{ ReturnType{ measure }.Count() % divider };
 	}
 
 	template<
@@ -251,18 +251,16 @@ namespace LCN::Units
 		typename _Type1, typename _Ratio1,
 		typename _Type2, typename _Ratio2>
 	constexpr
-	std::common_type_t<
-		Unit<_MeasurementType, _Type1, _Ratio1>,
-		Unit<_MeasurementType, _Type2, _Ratio2>>
+	auto
 	operator%(
 		const Unit<_MeasurementType, _Type1, _Ratio1>& left,
 		const Unit<_MeasurementType, _Type2, _Ratio2>& right)
 	{
-		using ReturnType = std::common_type_t<
+		using ReturnType = typename CommonType<
 			Unit<_MeasurementType, _Type1, _Ratio1>,
-			Unit<_MeasurementType, _Type2, _Ratio2>>;
+			Unit<_MeasurementType, _Type2, _Ratio2>>::Type;
 
-		return ReturnType(ReturnType(left).Count() % ReturnType(right).Count());
+		return ReturnType{ ReturnType{ left }.Count() % ReturnType{ right }.Count() };
 	}
 
 #pragma endregion
@@ -313,11 +311,11 @@ namespace LCN::Units
 		const Unit<_MeasurementType, _Type1, _Ratio1>& left,
 		const Unit<_MeasurementType, _Type2, _Ratio2>& right)
 	{
-		using CommonType = std::common_type_t<
+		using _CommonType = typename CommonType<
 			Unit<_MeasurementType, _Type1, _Ratio1>,
-			Unit<_MeasurementType, _Type2, _Ratio2>>;
+			Unit<_MeasurementType, _Type2, _Ratio2>>::Type;
 
-		return CommonType(left).Count() < CommonType(right).Count();
+		return _CommonType{ left }.Count() < _CommonType{ right }.Count();
 	}	
 
 	template<

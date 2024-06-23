@@ -11,7 +11,7 @@ add_executable(${TEST}
     src/Arguments.cpp
     src/BitwiseEditor.cpp
     src/SplitString.cpp
-    src/Units.cpp)
+    src/UnitAngles.cpp)
 
 target_link_libraries(${TEST} PRIVATE
     GTest::gtest
