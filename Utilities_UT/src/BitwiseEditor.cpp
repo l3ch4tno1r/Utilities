@@ -7,14 +7,14 @@ namespace LCN::UnitTests
     TEST(Bitwise, Reading)
     {
         int data = 0b101101;
-        LCN::Bitwise editor{ std::as_const(data) };
+        LCN::Bitwise reader{ std::as_const(data) };
 
-        EXPECT_EQ(editor[0], 1);
-        EXPECT_EQ(editor[1], 0);
-        EXPECT_EQ(editor[2], 1);
-        EXPECT_EQ(editor[3], 1);
-        EXPECT_EQ(editor[4], 0);
-        EXPECT_EQ(editor[5], 1);
+        EXPECT_EQ(reader[0], 1);
+        EXPECT_EQ(reader[1], 0);
+        EXPECT_EQ(reader[2], 1);
+        EXPECT_EQ(reader[3], 1);
+        EXPECT_EQ(reader[4], 0);
+        EXPECT_EQ(reader[5], 1);
     }
 
     TEST(Bitwise, Writing)
