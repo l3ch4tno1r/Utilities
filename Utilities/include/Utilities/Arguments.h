@@ -54,7 +54,7 @@ namespace LCN::Utilities
         }
 
         template<typename _StrType>
-        requires std::same_as<CharType, typename _StrType::value_type>
+        requires std::convertible_to<CharType, typename _StrType::value_type>
         void
         operator>>(
             _StrType& str)
@@ -70,8 +70,8 @@ namespace LCN::Utilities
             _Arithmetic& value)
         {
             return std::from_chars(
-                m_Argv.begin(),
-                m_Argv.end(),
+                m_Argv.data(),
+                m_Argv.data() + m_Argv.size(),
                 value).ec;
         }
 
